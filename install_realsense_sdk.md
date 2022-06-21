@@ -44,7 +44,11 @@ echo "export realsense2_DIR=/opt/realsense/lib/cmake/realsense2" >> ~/.bashrc
 
 ```
 ### reboot
+```console
 
+reboot
+
+```
 
 # test
 ```console
@@ -75,7 +79,7 @@ sudo udevadm control --reload-rules && udevadm trigger
 
 ```
 
-##### --> remove the line "export realsense2_DIR=/opt/realsense/lib/cmake/realsense2" from ~/.bashrc
+#### &#8594; remove the line " ```console export realsense2_DIR=/opt/realsense/lib/cmake/realsense2 ```" from ~/.bashrc
 
 
 ## Source : https://answers.ros.org/question/363889/intel-realsens-on-ubuntu-2004-ros-noetic-installation-desription/
