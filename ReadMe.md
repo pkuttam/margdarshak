@@ -1,1 +1,1 @@
-Margdarshak project is made to help blind people.
+Margdarshak project is made to help people.
