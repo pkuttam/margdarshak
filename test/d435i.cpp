@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) try
         float dist_to_center = depth.get_distance(width / 2, height / 2);
 
         // Print the distance
-        std::cout << "The camera is facing an object " << dist_to_center << " meters away \r";
+        std::cout << "The camera is facing an object " << dist_to_center << " meters away \n";
     }
 
     return EXIT_SUCCESS;

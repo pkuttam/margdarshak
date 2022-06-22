@@ -1,3 +1,4 @@
 # ignore ALL files in ANY directory named build
 
 build/
+cmake-build-debug/
