@@ -6,8 +6,8 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <fstream>
-//#include "IMU/IMUTypes.h"
-//#include "sophus/se3.hpp"
+#include "IMUTypes.h"
+#include "sophus/se3.hpp"
 //#include "util/MinimalImage.h"
 
 using namespace margdarshak;
@@ -155,7 +155,7 @@ void margdarshak::Realsense435I::start()
     readCalibration();
 }
 
-void dmvio::Realsense435I::readCalibration()
+void margdarshak::Realsense435I::readCalibration()
 {
     if(calibrationRead) return;
     auto accel_stream = profile.get_stream(RS2_STREAM_ACCEL);
