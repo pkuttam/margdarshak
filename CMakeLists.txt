@@ -1,6 +1,3 @@
-# License: Apache 2.0. See LICENSE file in root directory.
-# Copyright(c) 2019 Intel Corporation. All Rights Reserved.
-#  minimum required cmake version: 3.1.0
 cmake_minimum_required(VERSION 3.1.0)
 
 project(margdarshak)
@@ -9,7 +6,7 @@ find_package(realsense2 REQUIRED)
 find_package( OpenCV REQUIRED )
 find_package(Boost COMPONENTS system thread filesystem chrono serialization date_time timer)
 if(Boost_FOUND)
-    message(HINT,"hello")
+    message("Boost Found!")
 endif()
 
 
