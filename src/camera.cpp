@@ -1,5 +1,5 @@
 
-#include "RealsenseD435I.h"
+#include "camera.h"
 #include <iostream>
 #include <iomanip>
 #include <opencv2/core/mat.hpp>
@@ -15,7 +15,7 @@ using std::vector;
 
 static cv::Mat frame_to_mat(const rs2::frame& f);
 
-margdarshak::Realsense435I::Realsense435I(FrameContainer& frameContainer, std::string cameraCalibSavePath, DatasetSaver*
+margdarshak::camera::camera(FrameContainer& frameContainer, std::string cameraCalibSavePath, DatasetSaver*
 datasetSaver)
         : imuInt(frameContainer, datasetSaver), cameraCalibSavePath(cameraCalibSavePath), saver(datasetSaver)
 {
@@ -44,15 +44,17 @@ datasetSaver)
         }
     }
 
-    auto device = context.query_devices()[0];
+    /*auto device = context.query_devices()[0];
     device.hardware_reset();
 
     std::cout << "Device " << device.get_info(RS2_CAMERA_INFO_NAME)
               << " connected" << std::endl;
+    */
 }
 
-void margdarshak::Realsense435I::start()
+void margdarshak::camera::start()
 {
+
     std::cout << "Starting realsense feeds\n";
     auto callback = [&](const rs2::frame& frame)
     {
@@ -104,7 +106,7 @@ void margdarshak::Realsense435I::start()
             }
         }else if(auto fs = frame.as<rs2::frameset>())
         {
-            auto f = fs[useCam]; // We only use left camera
+            auto f = fs[0]; // We only use left camera
             if(!f.as<rs2::video_frame>())
             {
                 std::cout << "Weird Frame, skipping" << std::endl;
@@ -118,14 +120,14 @@ void margdarshak::Realsense435I::start()
             if(std::abs(timestamp - lastImgTimestamp) > 0.001)
             {
                 cv::Mat mat = frame_to_mat(f);
-                assert(mat.type() == CV_8U);
+                assert(mat.type() == CV_8UC3);
 
                 // Multiply exposure by 1000, as we want milliseconds.
-                double exposure = vf.get_frame_metadata(RS2_FRAME_METADATA_ACTUAL_EXPOSURE) * 1e-3;
+                //double exposure = vf.get_frame_metadata(RS2_FRAME_METADATA_ACTUAL_EXPOSURE) * 1e-3;
 
                 if(saver)
                 {
-                    saver->addImage(mat, timestamp / 1000.0, exposure);
+                    saver->addImage(mat, timestamp / 1000.0, 0.5);
                 }
 
                 //auto img = std::make_unique<dso::MinimalImageB>(mat.cols, mat.rows);
@@ -155,7 +157,7 @@ void margdarshak::Realsense435I::start()
     readCalibration();
 }
 
-void margdarshak::Realsense435I::readCalibration()
+void margdarshak::camera::readCalibration()
 {
     if(calibrationRead) return;
     auto accel_stream = profile.get_stream(RS2_STREAM_ACCEL);
@@ -246,8 +248,8 @@ void margdarshak::Realsense435I::readCalibration()
             // We assume Kanala Brandt model.
             std::cout << "distortion model type: " << intrinsics.model << std::endl;
             std::cout << intrinsics.fx << " " << intrinsics.fy << " " << intrinsics.ppx << " "
-                         << intrinsics.ppy << " " << intrinsics.coeffs[0] << " " << intrinsics.coeffs[1] << " " <<
-                         intrinsics.coeffs[2] << " " << intrinsics.coeffs[3] <<  " " << intrinsics.coeffs[4] <<  " " << intrinsics.coeffs[5]<< "\n";
+                      << intrinsics.ppy << " " << intrinsics.coeffs[0] << " " << intrinsics.coeffs[1] << " " <<
+                      intrinsics.coeffs[2] << " " << intrinsics.coeffs[3] <<  " " << intrinsics.coeffs[4] <<  " " << intrinsics.coeffs[5]<< "\n";
             //assert(intrinsics.model == RS2_DISTORTION_KANNALA_BRANDT4); // all distortion are zero
             //std::cout << intrinsics.
             // Write camera calibration to file.

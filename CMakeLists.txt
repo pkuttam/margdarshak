@@ -26,7 +26,9 @@ set(SRC src/IMUTypes.cpp
         src/TimeMeasurement.cpp
         src/DatasetSaver.cpp
         src/settings.cpp
-        src/IMUInterpolator.cpp)
+        src/IMUInterpolator.cpp
+        src/RealsenseD435I.cpp
+        src/camera.cpp)
 
 
 
@@ -34,5 +36,5 @@ include_directories(include)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/third_party/Sophus)
 
-add_executable(main main.cpp ${SRC})
+add_executable(main check_camera_class.cpp ${SRC})
 target_link_libraries(main ${realsense2_LIBRARY} ${OpenCV_LIBS} ${Boost_LIBRARIES} )
